@@ -1,4 +1,4 @@
-package me.belyakov.ntlban.exceptions;
+package me.belyakov.ntlbank.exceptions;
 
 public class BadRefreshJWTException extends BadJWTException {
 

@@ -1,14 +1,14 @@
-package me.belyakov.ntlban.services.implementations;
+package me.belyakov.ntlbank.services.implementations;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import me.belyakov.ntlban.data.entities.UserEntity;
-import me.belyakov.ntlban.data.repositories.UserRepository;
-import me.belyakov.ntlban.exceptions.BadRefreshJWTException;
-import me.belyakov.ntlban.services.JwtService;
+import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.data.repositories.UserRepository;
+import me.belyakov.ntlbank.exceptions.BadRefreshJWTException;
+import me.belyakov.ntlbank.services.JwtService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

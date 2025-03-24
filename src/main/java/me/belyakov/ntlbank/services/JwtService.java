@@ -1,6 +1,6 @@
-package me.belyakov.ntlban.services;
+package me.belyakov.ntlbank.services;
 
-import me.belyakov.ntlban.data.entities.UserEntity;
+import me.belyakov.ntlbank.data.entities.UserEntity;
 
 public interface JwtService {
 

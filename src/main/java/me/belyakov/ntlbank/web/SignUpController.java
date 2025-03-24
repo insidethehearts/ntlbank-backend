@@ -1,8 +1,8 @@
-package me.belyakov.ntlban.web;
+package me.belyakov.ntlbank.web;
 
 import jakarta.validation.Valid;
-import me.belyakov.ntlban.services.implementations.UserServiceImpl;
-import me.belyakov.ntlban.web.dto.UserDTO;
+import me.belyakov.ntlbank.services.implementations.UserServiceImpl;
+import me.belyakov.ntlbank.web.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

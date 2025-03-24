@@ -1,8 +1,8 @@
-package me.belyakov.ntlban.services.implementations;
+package me.belyakov.ntlbank.services.implementations;
 
-import me.belyakov.ntlban.data.entities.UserEntity;
-import me.belyakov.ntlban.data.repositories.UserRepository;
-import me.belyakov.ntlban.web.dto.UserDTO;
+import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.data.repositories.UserRepository;
+import me.belyakov.ntlbank.web.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
 @Service

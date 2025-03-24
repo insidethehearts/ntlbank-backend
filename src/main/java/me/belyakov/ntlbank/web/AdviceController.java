@@ -1,6 +1,6 @@
-package me.belyakov.ntlban.web;
+package me.belyakov.ntlbank.web;
 
-import me.belyakov.ntlban.exceptions.UserNotFoundException;
+import me.belyakov.ntlbank.exceptions.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
