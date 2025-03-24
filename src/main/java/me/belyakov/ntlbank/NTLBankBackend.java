@@ -1,4 +1,4 @@
-package me.belyakov.ntlban;
+package me.belyakov.ntlbank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

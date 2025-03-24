@@ -1,4 +1,4 @@
-package me.belyakov.ntlban.web.dto;
+package me.belyakov.ntlbank.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;

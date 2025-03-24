@@ -1,4 +1,4 @@
-package me.belyakov.ntlban.data.entities;
+package me.belyakov.ntlbank.data.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

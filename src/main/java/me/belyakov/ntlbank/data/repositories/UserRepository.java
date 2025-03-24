@@ -1,8 +1,8 @@
-package me.belyakov.ntlban.data.repositories;
+package me.belyakov.ntlbank.data.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import me.belyakov.ntlban.data.entities.UserEntity;
+import me.belyakov.ntlbank.data.entities.UserEntity;
 
 import java.util.Optional;
 

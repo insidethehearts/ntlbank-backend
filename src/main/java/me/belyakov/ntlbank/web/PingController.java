@@ -1,4 +1,4 @@
-package me.belyakov.ntlban.web;
+package me.belyakov.ntlbank.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

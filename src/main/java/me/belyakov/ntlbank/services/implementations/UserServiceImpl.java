@@ -1,12 +1,13 @@
-package me.belyakov.ntlban.services.implementations;
+package me.belyakov.ntlbank.services.implementations;
 
-import me.belyakov.ntlban.data.entities.UserEntity;
-import me.belyakov.ntlban.data.repositories.UserRepository;
-import me.belyakov.ntlban.web.dto.UserDTO;
+import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.data.repositories.UserRepository;
+import me.belyakov.ntlbank.services.UserService;
+import me.belyakov.ntlbank.web.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
@@ -24,7 +25,7 @@ public class UserServiceImpl {
                 ).isPresent();
     }
 
-    public void registerUser(UserDTO userDTO) {
+    public UserEntity registerUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
         userEntity.setSurname(userDTO.getSurname());
         userEntity.setName(userDTO.getName());
@@ -33,7 +34,8 @@ public class UserServiceImpl {
         userEntity.setPhone(userDTO.getPhone());
         userEntity.setPassportSeries(userDTO.getPassportSeries());
         userEntity.setPassportNumber(userDTO.getPassportNumber());
-        userEntity.setPassword(userDTO.getPassword());
+        userEntity.setPassword(userDTO.getPassword()); // TODO password protection
         userRepository.save(userEntity);
+        return userEntity;
     }
 }

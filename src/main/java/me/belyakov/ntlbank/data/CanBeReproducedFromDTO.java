@@ -1,4 +1,4 @@
-package me.belyakov.ntlban.data;
+package me.belyakov.ntlbank.data;
 
 public interface CanBeReproducedFromDTO<T> {
 

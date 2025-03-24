@@ -1,4 +1,4 @@
-package me.belyakov.ntlban;
+package me.belyakov.ntlbank;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,13 @@ public class SecurityConfiguration {
         DefaultSecurityFilterChain defaultSecurityFilterChain =
                 httpSecurity
                         .csrf(AbstractHttpConfigurer::disable)
-                        .cors(cors -> {
-                            cors.configurationSource(corsConfigurationSource());
-                        })
+//                        .cors(cors -> {
+//                            cors.configurationSource(corsConfigurationSource());
+//                        })
+                        .cors(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(auth ->
                             auth
-                                    .requestMatchers("/ping").permitAll()
+                                    .requestMatchers("/**").permitAll()
                         )
                         .build();
         return defaultSecurityFilterChain;
