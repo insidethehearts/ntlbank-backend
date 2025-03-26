@@ -2,9 +2,12 @@ package me.belyakov.ntlbank.services.implementations;
 
 import me.belyakov.ntlbank.data.entities.UserEntity;
 import me.belyakov.ntlbank.data.repositories.UserRepository;
+import me.belyakov.ntlbank.exceptions.UserNotFoundException;
 import me.belyakov.ntlbank.services.UserService;
 import me.belyakov.ntlbank.web.dto.UserDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,4 +41,13 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
         return userEntity;
     }
+
+    public UserEntity findByEmailAndPassword(String email, String password) {
+        return userRepository.findByEmailAndPassword(email, password).orElseThrow(() -> new UserNotFoundException(email, password));
+    }
+
+    public UserEntity findByPhoneAndPassword(String phone, String password) {
+        return userRepository.findByPhoneAndPassword(phone, password).orElseThrow(() -> new UserNotFoundException(phone, password));
+    }
+
 }

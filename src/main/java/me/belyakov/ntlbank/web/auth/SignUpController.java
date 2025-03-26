@@ -1,4 +1,4 @@
-package me.belyakov.ntlbank.web;
+package me.belyakov.ntlbank.web.auth;
 
 import jakarta.validation.Valid;
 import me.belyakov.ntlbank.data.entities.UserEntity;
@@ -39,7 +39,7 @@ public class SignUpController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.CONFLICT);
         } else {
             UserEntity user = userService.registerUser(userDTO);
-            jsonResponse.put("status", HttpStatus.OK);
+            jsonResponse.put("status", HttpStatus.OK.value());
             jsonResponse.put("refresh_token", jwtService.generateRefresh(user));
             jsonResponse.put("access_token", jwtService.generateAccess(user));
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
