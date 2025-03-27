@@ -2,14 +2,18 @@ package me.belyakov.ntlbank.data.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import me.belyakov.ntlbank.data.entities.cards.Card;
 
-@Entity
+import java.util.ArrayList;
+import java.util.List;
+
+@MappedSuperclass
 @Data
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long Id;
 
     @Column(nullable = false)
     private String surname;
@@ -34,4 +38,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "cardHolder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cards = new ArrayList<>();
 }

@@ -9,6 +9,8 @@ public interface UserService {
 
     UserEntity registerUser(UserDTO userDTO);
 
+    UserEntity findById(Long id);
+
     UserEntity findByEmailAndPassword(String email, String password);
 
     UserEntity findByPhoneAndPassword(String phone, String password);

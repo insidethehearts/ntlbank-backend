@@ -1,4 +1,4 @@
-package me.belyakov.ntlbank.exceptions;
+package me.belyakov.ntlbank.exceptions.token;
 
 public abstract class BadJWTException extends RuntimeException {
 

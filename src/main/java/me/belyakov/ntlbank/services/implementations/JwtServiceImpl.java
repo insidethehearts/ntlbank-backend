@@ -7,10 +7,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import me.belyakov.ntlbank.data.entities.UserEntity;
 import me.belyakov.ntlbank.data.repositories.UserRepository;
-import me.belyakov.ntlbank.exceptions.BadAccessJWTException;
-import me.belyakov.ntlbank.exceptions.BadRefreshJWTException;
-import me.belyakov.ntlbank.exceptions.ExpiredAccessJWTException;
-import me.belyakov.ntlbank.exceptions.ExpiredRefreshJWTException;
+import me.belyakov.ntlbank.exceptions.token.BadAccessJWTException;
+import me.belyakov.ntlbank.exceptions.token.BadRefreshJWTException;
+import me.belyakov.ntlbank.exceptions.token.ExpiredAccessJWTException;
+import me.belyakov.ntlbank.exceptions.token.ExpiredRefreshJWTException;
 import me.belyakov.ntlbank.services.JwtService;
 import org.springframework.stereotype.Service;
 
