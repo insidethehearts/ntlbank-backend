@@ -1,7 +1,7 @@
 package me.belyakov.ntlbank.services;
 
 import me.belyakov.ntlbank.data.entities.UserEntity;
-import me.belyakov.ntlbank.web.dto.UserDTO;
+import me.belyakov.ntlbank.objects.dto.UserDTO;
 
 public interface UserService {
 

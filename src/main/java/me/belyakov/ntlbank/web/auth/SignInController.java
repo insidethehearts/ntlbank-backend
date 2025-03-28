@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import me.belyakov.ntlbank.data.entities.UserEntity;
 import me.belyakov.ntlbank.services.JwtService;
 import me.belyakov.ntlbank.services.UserService;
-import me.belyakov.ntlbank.web.dto.SignInDTO;
+import me.belyakov.ntlbank.objects.dto.SignInDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
