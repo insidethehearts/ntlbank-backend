@@ -5,6 +5,8 @@ import me.belyakov.ntlbank.objects.dto.UserDTO;
 
 public interface UserService {
 
+    void save(UserEntity entity);
+
     boolean isUserExists(UserDTO userDTO);
 
     UserEntity registerUser(UserDTO userDTO);

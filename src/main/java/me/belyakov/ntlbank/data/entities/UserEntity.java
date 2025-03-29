@@ -2,12 +2,13 @@ package me.belyakov.ntlbank.data.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import me.belyakov.ntlbank.data.entities.cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@MappedSuperclass
+@Entity
 @Data
 public class UserEntity {
 

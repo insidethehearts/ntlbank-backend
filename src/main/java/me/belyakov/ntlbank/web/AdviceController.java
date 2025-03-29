@@ -1,5 +1,6 @@
 package me.belyakov.ntlbank.web;
 
+import me.belyakov.ntlbank.exceptions.token.BadJWTException;
 import me.belyakov.ntlbank.exceptions.token.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,15 @@ public class AdviceController extends ResponseEntityExceptionHandler {
         jsonResponse.put("error", runtimeException.getMessage());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(exception = BadJWTException.class )
+    protected ResponseEntity<Object> handleBadRequestGroupedExceptions(RuntimeException runtimeException, WebRequest request) {
+        Map<String, Object> jsonResponse = new LinkedHashMap<>();
+        jsonResponse.put("timestamp", LocalDateTime.now());
+        jsonResponse.put("status", HttpStatus.BAD_REQUEST);
+        jsonResponse.put("error", runtimeException.getMessage());
+        jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
     }
 }

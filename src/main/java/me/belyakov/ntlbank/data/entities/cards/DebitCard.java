@@ -1,24 +1,42 @@
 package me.belyakov.ntlbank.data.entities.cards;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import me.belyakov.ntlbank.exceptions.economy.InsufficientFundsException;
+import me.belyakov.ntlbank.data.entities.UserEntity;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "debit_cards")
 public class DebitCard extends Card {
 
-    public DebitCard(String number, String expirationDate, String CVP) {
-        super(CardType.DEBIT, number, expirationDate, CVP);
+    public DebitCard() {
+        init();
+    }
+
+    public DebitCard(UserEntity cardHolder) {
+        super(CardType.DEBIT, cardHolder);
+        init();
+    }
+
+    private void init() {
+        this.balance = new BigDecimal(5000);
     }
 
     @Override
-    public void withdraw(BigDecimal sum) {
+    public boolean withdraw(BigDecimal sum) {
         if (balance.compareTo(sum) < 0) {
-            throw new InsufficientFundsException();
+            return false;
         }
         this.balance = balance.subtract(sum);
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "DebitCard{" +
+                "balance=" + balance +
+                ", number='" + number + '\'' +
+                ", expirationDate='" + expirationDate + '\'' +
+                ", CVP='" + CVP + '\'' +
+                '}';
     }
 }
