@@ -1,8 +1,10 @@
 package me.belyakov.ntlbank.web;
 
+import me.belyakov.ntlbank.exceptions.economy.CardNotFoundException;
 import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 import me.belyakov.ntlbank.exceptions.token.BadJWTException;
-import me.belyakov.ntlbank.exceptions.token.UserNotFoundException;
+import me.belyakov.ntlbank.exceptions.token.ExpiredJWTException;
+import me.belyakov.ntlbank.exceptions.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -43,11 +45,21 @@ public class AdviceController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(exception = BadJWTException.class )
-    protected ResponseEntity<Object> handleBadRequestGroupedExceptions(BadJWTException badJWTException, WebRequest request) {
+    protected ResponseEntity<Object> handleBadJwtExceptions(BadJWTException badJWTException, WebRequest request) {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
         jsonResponse.put("status", HttpStatus.BAD_REQUEST);
         jsonResponse.put("error", badJWTException.getMessage());
+        jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(exception = ExpiredJWTException.class)
+    protected ResponseEntity<Object> handleExpiredJwtExceptions(ExpiredJWTException exception, WebRequest request) {
+        Map<String, Object> jsonResponse = new LinkedHashMap<>();
+        jsonResponse.put("timestamp", LocalDateTime.now());
+        jsonResponse.put("status", HttpStatus.BAD_REQUEST.value());
+        jsonResponse.put("error", exception.getMessage());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
     }
@@ -60,6 +72,16 @@ public class AdviceController extends ResponseEntityExceptionHandler {
         jsonResponse.put("error", withdrawException.getMessage());
         jsonResponse.put("blocked_payment_sum", withdrawException.getSum());
         jsonResponse.put("allowed_payment_sum", withdrawException.getAllowedSum());
+        jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(exception = CardNotFoundException.class)
+    protected ResponseEntity<Object> handleCardNotFoundException(CardNotFoundException cardNotFoundException, WebRequest request) {
+        Map<String, Object> jsonResponse = new LinkedHashMap<>();
+        jsonResponse.put("timestamp", LocalDateTime.now());
+        jsonResponse.put("status", HttpStatus.BAD_REQUEST);
+        jsonResponse.put("error", cardNotFoundException.getMessage());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
     }

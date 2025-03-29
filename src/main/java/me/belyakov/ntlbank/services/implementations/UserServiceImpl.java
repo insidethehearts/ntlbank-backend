@@ -2,7 +2,7 @@ package me.belyakov.ntlbank.services.implementations;
 
 import me.belyakov.ntlbank.data.entities.UserEntity;
 import me.belyakov.ntlbank.data.repositories.UserRepository;
-import me.belyakov.ntlbank.exceptions.token.UserNotFoundException;
+import me.belyakov.ntlbank.exceptions.UserNotFoundException;
 import me.belyakov.ntlbank.services.UserService;
 import me.belyakov.ntlbank.objects.dto.UserDTO;
 import org.springframework.stereotype.Service;

@@ -11,6 +11,8 @@ import me.belyakov.ntlbank.services.CardService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CardServiceImpl implements CardService {
 
@@ -37,5 +39,10 @@ public class CardServiceImpl implements CardService {
     public Card find(String number, String expirationDate, String CVP, UserEntity cardHolder) {
         return cardRepository.findByNumberAndExpirationDateAndCVPAndCardHolder(number, expirationDate, CVP, cardHolder)
                 .orElseThrow(() -> new CardNotFoundException(number));
+    }
+
+    @Override
+    public List<Card> getCards(UserEntity userEntity) {
+        return cardRepository.findByCardHolder(userEntity);
     }
 }

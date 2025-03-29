@@ -1,4 +1,4 @@
-package me.belyakov.ntlbank.exceptions.token;
+package me.belyakov.ntlbank.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
 
