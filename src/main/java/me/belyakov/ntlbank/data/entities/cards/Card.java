@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.exceptions.economy.InsufficientFundsException;
 import me.belyakov.ntlbank.services.CardService;
 
 import java.math.BigDecimal;
@@ -67,7 +68,7 @@ public abstract class Card {
         this.balance = new BigDecimal(0);
     }
 
-    public abstract boolean withdraw(BigDecimal sum);
+    public abstract void withdraw(BigDecimal sum) throws InsufficientFundsException;
 
     public void deposit(BigDecimal sum) {
         this.balance = this.balance.add(sum);

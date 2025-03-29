@@ -33,8 +33,7 @@ public class CardOrderController {
     @PostMapping(value = "/cards/order", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> orderCard(
             @RequestHeader(value = "X-Access-Token") String accessToken,
-            @RequestBody Map<String, Object> requestBody,
-            WebRequest request
+            @RequestBody Map<String, Object> requestBody
     ) {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
@@ -53,7 +52,7 @@ public class CardOrderController {
         userService.save(user);
         jsonResponse.put("card_type", newCard.getCardType().toString());
         jsonResponse.put("card_number", newCard.getNumber());
-        jsonResponse.put("card_expirationDate", newCard.getExpirationDate());
+        jsonResponse.put("card_expiration_date", newCard.getExpirationDate());
         jsonResponse.put("card_cvp", newCard.getCVP());
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }

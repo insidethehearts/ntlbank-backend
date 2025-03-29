@@ -1,5 +1,6 @@
 package me.belyakov.ntlbank.web;
 
+import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 import me.belyakov.ntlbank.exceptions.token.BadJWTException;
 import me.belyakov.ntlbank.exceptions.token.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -32,21 +33,33 @@ public class AdviceController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(exception = UserNotFoundException.class)
-    protected ResponseEntity<Object> handleUserNotFoundException(RuntimeException runtimeException, WebRequest request) {
+    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException userNotFoundException, WebRequest request) {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
         jsonResponse.put("status", HttpStatus.UNAUTHORIZED);
-        jsonResponse.put("error", runtimeException.getMessage());
+        jsonResponse.put("error", userNotFoundException.getMessage());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(exception = BadJWTException.class )
-    protected ResponseEntity<Object> handleBadRequestGroupedExceptions(RuntimeException runtimeException, WebRequest request) {
+    protected ResponseEntity<Object> handleBadRequestGroupedExceptions(BadJWTException badJWTException, WebRequest request) {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
         jsonResponse.put("status", HttpStatus.BAD_REQUEST);
-        jsonResponse.put("error", runtimeException.getMessage());
+        jsonResponse.put("error", badJWTException.getMessage());
+        jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(exception = WithdrawException.class)
+    protected ResponseEntity<Object> handleWithdrawException(WithdrawException withdrawException, WebRequest request) {
+        Map<String, Object> jsonResponse = new LinkedHashMap<>();
+        jsonResponse.put("timestamp", LocalDateTime.now());
+        jsonResponse.put("status", HttpStatus.BAD_REQUEST);
+        jsonResponse.put("error", withdrawException.getMessage());
+        jsonResponse.put("blocked_payment_sum", withdrawException.getSum());
+        jsonResponse.put("allowed_payment_sum", withdrawException.getAllowedSum());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
     }

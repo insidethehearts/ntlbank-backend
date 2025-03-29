@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.exceptions.economy.InsufficientFundsException;
+import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 
 import java.math.BigDecimal;
 
@@ -28,8 +30,12 @@ public class CreditCard extends Card {
     }
 
     @Override
-    public boolean withdraw(BigDecimal sum) {
-        return this.balance.add(creditLimit).compareTo(sum) < 0;
+    public void withdraw(BigDecimal sum) throws WithdrawException {
+        BigDecimal allowedSum = this.balance.add(creditLimit);
+        if (allowedSum.compareTo(sum) < 0) {
+            throw new WithdrawException(this.number, sum, allowedSum);
+        }
+        this.balance = this.balance.subtract(sum);
     }
 
 

@@ -2,6 +2,7 @@ package me.belyakov.ntlbank.data.entities.cards;
 
 import jakarta.persistence.Entity;
 import me.belyakov.ntlbank.data.entities.UserEntity;
+import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 
 import java.math.BigDecimal;
 
@@ -22,12 +23,11 @@ public class DebitCard extends Card {
     }
 
     @Override
-    public boolean withdraw(BigDecimal sum) {
+    public void withdraw(BigDecimal sum) throws WithdrawException {
         if (balance.compareTo(sum) < 0) {
-            return false;
+            throw new WithdrawException(this.number, sum, balance);
         }
         this.balance = balance.subtract(sum);
-        return true;
     }
 
     @Override

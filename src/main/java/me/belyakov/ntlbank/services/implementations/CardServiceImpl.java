@@ -6,11 +6,10 @@ import me.belyakov.ntlbank.data.entities.cards.CardType;
 import me.belyakov.ntlbank.data.entities.cards.CreditCard;
 import me.belyakov.ntlbank.data.entities.cards.DebitCard;
 import me.belyakov.ntlbank.data.repositories.CardRepository;
+import me.belyakov.ntlbank.exceptions.economy.CardNotFoundException;
 import me.belyakov.ntlbank.services.CardService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -29,12 +28,14 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Optional<Card> find(String number) {
-        return Optional.empty(); // TODO
+    public Card find(String number) {
+        return cardRepository.findByNumber(number)
+                .orElseThrow(() -> new CardNotFoundException(number));
     }
 
     @Override
-    public Optional<Card> find(String number, String expirationDate, String CVP) {
-        return Optional.empty(); // TODO
+    public Card find(String number, String expirationDate, String CVP, UserEntity cardHolder) {
+        return cardRepository.findByNumberAndExpirationDateAndCVPAndCardHolder(number, expirationDate, CVP, cardHolder)
+                .orElseThrow(() -> new CardNotFoundException(number));
     }
 }

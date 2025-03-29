@@ -17,6 +17,8 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
 
     Optional<Card> findByNumber(String number);
 
+    Optional<Card> findByNumberAndExpirationDateAndCVPAndCardHolder(String number, String expirationDate, String CVP, UserEntity cardHolder);
+
     Optional<Card> findByNumberAndExpirationDateAndCVP(String number, String expirationDate, String CVP);
 
     List<Card> findByCardHolder(UserEntity cardHolder);
