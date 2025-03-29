@@ -36,17 +36,14 @@ public class GetCardsController {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
         UserEntity userEntity = jwtService.userFromAccessJWT(accessToken);
-        List<CardReverseDTO> cardList = cardService.getCards(userEntity).stream().map(nativeCard -> {
-            CardReverseDTO dto = new CardReverseDTO(
-                    nativeCard.getCardType(),
-                    nativeCard.getNumber(),
-                    nativeCard.getExpirationDate(),
-                    nativeCard.getCVP(),
-                    nativeCard.getBalance(),
-                    (nativeCard.getCardType() == CardType.DEBIT) ? null : ((CreditCard) nativeCard).getCreditLimit()
-            );
-            return dto;
-        }).toList();
+        List<CardReverseDTO> cardList = cardService.getCards(userEntity).stream().map(nativeCard -> new CardReverseDTO(
+                nativeCard.getCardType(),
+                nativeCard.getNumber(),
+                nativeCard.getExpirationDate(),
+                nativeCard.getCVP(),
+                nativeCard.getBalance(),
+                (nativeCard.getCardType() == CardType.DEBIT) ? null : ((CreditCard) nativeCard).getCreditLimit()
+        )).toList();
         jsonResponse.put("cards", cardList);
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
