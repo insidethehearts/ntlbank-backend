@@ -1,0 +1,447 @@
+{
+	"info": {
+		"_postman_id": "2623cc82-ccc2-45f9-9867-53c8c6992554",
+		"name": "NTLBank-backend-tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40690893"
+	},
+	"item": [
+		{
+			"name": "[1] Ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[1] Пинг\", () => {",
+							"    if (pm.response.code != 200) {",
+							"        pm.expect.fail(`При пинге получен код ${pm.response.code} вместо 200.`);",
+							"    }",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/ping",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[2] Sign Up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[2] Регистрация | Код ответа 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"[2] Регистрация | Токены получены\", () => {",
+							"    pm.response.to.be.json;",
+							"",
+							"    const response = pm.response.json();",
+							"",
+							"    const requiredFields = [\"status\", \"refresh_token\", \"access_token\"];",
+							"    requiredFields.forEach(field => {",
+							"        pm.expect(response).to.have.property(field);",
+							"    });",
+							"",
+							"    pm.environment.set(\"received_access_token\", response.access_token);",
+							"    pm.environment.set(\"received_refresh_token\", response.refresh_token);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"surname\": \"{{user_data_surname}}\",\n    \"name\": \"{{user_data_name}}\",\n    \"patronymic\": \"{{user_data_patronymic}}\",\n    \"email\": \"{{user_data_email}}\",\n    \"phone\": \"{{user_data_phone}}\",\n    \"passport_series\": \"{{user_data_passport_series}}\",\n    \"passport_number\": \"{{user_data_passport_number}}\",\n    \"password\": \"{{user_data_password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/sign-up",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[3] Refresh Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[3] Обновление токена\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"",
+							"    const response = pm.response.json();",
+							"",
+							"    const requiredFields = [\"access_token\"];",
+							"    requiredFields.forEach(field => {",
+							"        pm.expect(response).to.have.property(field);",
+							"    });",
+							"",
+							"    pm.environment.set(\"received_access_token\", response.access_token);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Refresh-Token",
+						"value": "{{received_refresh_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth/refresh-access",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth",
+						"refresh-access"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[4] Order Debit Card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[4] Оформление дебетовой карты\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"",
+							"    const response = pm.response.json();",
+							"",
+							"    const requiredFields = ",
+							"        [\"card_type\", \"card_number\", \"card_expiration_date\", \"card_cvp\"];",
+							"",
+							"    requiredFields.forEach(field => {",
+							"        pm.expect(response).to.have.property(field);",
+							"    });",
+							"",
+							"    pm.environment.set(\"debit_card_number\", response.card_number);",
+							"    pm.environment.set(\"debit_card_expiration_date\", response.card_expiration_date);",
+							"    pm.environment.set(\"debit_card_cvp\", response.card_cvp);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{received_access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"card_type\": \"DEBIT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/cards/order",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cards",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[4] Order Credit Card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[4] Оформление кредитной карты\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"",
+							"    const response = pm.response.json();",
+							"",
+							"    const requiredFields = ",
+							"        [\"card_type\", \"card_number\", \"card_expiration_date\", \"card_cvp\"];",
+							"",
+							"    requiredFields.forEach(field => {",
+							"        pm.expect(response).to.have.property(field);",
+							"    });",
+							"",
+							"    pm.environment.set(\"credit_card_number\", response.card_number);",
+							"    pm.environment.set(\"credit_card_expiration_date\", response.card_expiration_date);",
+							"    pm.environment.set(\"credit_card_cvp\", response.card_cvp);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{received_access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"card_type\" : \"CREDIT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/cards/order",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"cards",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[5] Process transaction",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[5] Проведение успешной транзакции\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"    })"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{received_access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"owned_card_number\": \"{{credit_card_number}}\",\n    \"owned_card_expiration_date\": \"{{credit_card_expiration_date}}\",\n    \"owned_card_cvp\": \"{{credit_card_cvp}}\",\n    \"target_card_number\": \"{{debit_card_number}}\",\n    \"sum\": \"5000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/economy/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"economy",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[5] Try to Process bad transaction (Insufficient funds)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"[5] Проведение заведомо неуспешной транзакции\", () => {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.json;",
+							"    })"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{received_access_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"owned_card_number\": \"{{credit_card_number}}\",\n    \"owned_card_expiration_date\": \"{{credit_card_expiration_date}}\",\n    \"owned_card_cvp\": \"{{credit_card_cvp}}\",\n    \"target_card_number\": \"{{debit_card_number}}\",\n    \"sum\": \"200000000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/economy/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"economy",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "user_data_surname",
+			"value": "Asurname",
+			"type": "default"
+		},
+		{
+			"key": "user_data_name",
+			"value": "Bname",
+			"type": "default"
+		},
+		{
+			"key": "user_data_patronymic",
+			"value": "Cpatronymic",
+			"type": "default"
+		},
+		{
+			"key": "user_data_email",
+			"value": "e.mail@domain.dm",
+			"type": "default"
+		},
+		{
+			"key": "user_data_phone",
+			"value": "9003331234",
+			"type": "default"
+		},
+		{
+			"key": "user_data_passport_series",
+			"value": "4444",
+			"type": "default"
+		},
+		{
+			"key": "user_data_passport_number",
+			"value": "666666",
+			"type": "default"
+		},
+		{
+			"key": "user_data_password",
+			"value": "K/^z7GU'wQeJYMdLt9Cr,?",
+			"type": "default"
+		}
+	]
+}
