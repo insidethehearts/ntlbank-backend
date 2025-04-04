@@ -1,5 +1,7 @@
 package me.belyakov.ntlbank.web;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import me.belyakov.ntlbank.exceptions.economy.CardNotFoundException;
 import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 import me.belyakov.ntlbank.exceptions.token.BadJWTException;
@@ -28,7 +30,7 @@ public class AdviceController extends ResponseEntityExceptionHandler {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
         jsonResponse.put("status", HttpStatus.BAD_REQUEST.value());
-        jsonResponse.put("error", "Bad Request. Field '" + ex.getFieldErrors().getFirst().getField() + "' invalid.");
+        jsonResponse.put("error", "Bad Request. Field '" + ex.getFieldErrors().get(0) + "' invalid.");
         jsonResponse.put("invalid_fields", ex.getFieldErrors().stream().map(FieldError::getField).toList());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(jsonResponse, headers, status);
@@ -54,14 +56,24 @@ public class AdviceController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(exception = ExpiredJWTException.class)
+    @ExceptionHandler(exception = ExpiredJWTException.class )
     protected ResponseEntity<Object> handleExpiredJwtExceptions(ExpiredJWTException exception, WebRequest request) {
         Map<String, Object> jsonResponse = new LinkedHashMap<>();
         jsonResponse.put("timestamp", LocalDateTime.now());
-        jsonResponse.put("status", HttpStatus.BAD_REQUEST.value());
+        jsonResponse.put("status", HttpStatus.UNAUTHORIZED.value());
         jsonResponse.put("error", exception.getMessage());
         jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(exception = JWTVerificationException.class)
+    protected ResponseEntity<Object> handleJWTVerificationException(JWTVerificationException exception, WebRequest request) {
+        Map<String, Object> jsonResponse = new LinkedHashMap<>();
+        jsonResponse.put("timestamp", LocalDateTime.now());
+        jsonResponse.put("status", HttpStatus.UNAUTHORIZED.value());
+        jsonResponse.put("error", exception.getMessage());
+        jsonResponse.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(jsonResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(exception = WithdrawException.class)

@@ -4,13 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import me.belyakov.ntlbank.data.entities.UserEntity;
 import me.belyakov.ntlbank.data.repositories.UserRepository;
-import me.belyakov.ntlbank.exceptions.token.BadAccessJWTException;
-import me.belyakov.ntlbank.exceptions.token.BadRefreshJWTException;
-import me.belyakov.ntlbank.exceptions.token.ExpiredAccessJWTException;
-import me.belyakov.ntlbank.exceptions.token.ExpiredRefreshJWTException;
+import me.belyakov.ntlbank.exceptions.token.*;
 import me.belyakov.ntlbank.services.JwtService;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateAccess(String refreshToken) {
-        DecodedJWT decodedRefresh = decode(refreshToken);
+        DecodedJWT decodedRefresh = decode(refreshToken, "refresh");
         if (!decodedRefresh.getClaims().containsKey("uid")) throw new BadRefreshJWTException();
         UserEntity userEntity = userRepository.findById(decodedRefresh.getClaim("uid").asLong()).orElseThrow(() -> new BadRefreshJWTException("Bad user id."));
         return generateAccess(userEntity);
@@ -64,7 +62,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public UserEntity userFromAccessJWT(String accessToken) {
-        DecodedJWT decodedAccess = decode(accessToken);
+        DecodedJWT decodedAccess = decode(accessToken, "access");
         if (!decodedAccess.getClaims().containsKey("uid") || decodedAccess.getExpiresAtAsInstant() == null) throw new BadAccessJWTException();
         if (decodedAccess.getExpiresAtAsInstant().isBefore(Instant.now())) throw new ExpiredAccessJWTException();
         return userRepository.findById(decodedAccess.getClaim("uid").asLong()).orElseThrow(() -> new BadAccessJWTException("Bad user id."));
@@ -72,13 +70,20 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public UserEntity userFromRefreshJWT(String refreshToken) {
-        DecodedJWT decodedRefresh = decode(refreshToken);
+        DecodedJWT decodedRefresh = decode(refreshToken, "refresh");
         if (!decodedRefresh.getClaims().containsKey("uid") || decodedRefresh.getExpiresAtAsInstant() == null) throw new BadRefreshJWTException();
-        if (decodedRefresh.getExpiresAtAsInstant().isBefore(Instant.now())) throw new ExpiredRefreshJWTException();
         return userRepository.findById(decodedRefresh.getClaim("uid").asLong()).orElseThrow(() -> new BadRefreshJWTException("Bad user id."));
     }
 
-    private DecodedJWT decode(String token) throws JWTVerificationException {
-        return jwtVerifier.verify(token);
+    private DecodedJWT decode(String token, String tokenType) {
+        try {
+            return jwtVerifier.verify(token);
+        } catch (ExpiredJWTException e) {
+            if (tokenType.equalsIgnoreCase("access")) {
+                throw new ExpiredAccessJWTException();
+            } else {
+                throw new ExpiredRefreshJWTException();
+            }
+        }
     }
 }

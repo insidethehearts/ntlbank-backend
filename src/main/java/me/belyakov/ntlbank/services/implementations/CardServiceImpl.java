@@ -24,7 +24,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Card generateCardWithNumber(@NotNull CardType cardType, @NotNull UserEntity cardHolder) {
-        Card card = cardType == CardType.DEBIT ? new DebitCard(cardHolder) : new CreditCard(cardHolder); // TODO
+        Card card = cardType == CardType.DEBIT ? new DebitCard(cardHolder) : new CreditCard(cardHolder);
         card.setNumber(String.valueOf(cardRepository.generateCardNumber()));
         return card;
     }

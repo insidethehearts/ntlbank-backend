@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NTLBankBackend {
 
     public static void main(String[] args) {
-        SpringApplication.run(NTLBankBackend.class, args);
+         SpringApplication.run(NTLBankBackend.class, args);
     }
 
 }

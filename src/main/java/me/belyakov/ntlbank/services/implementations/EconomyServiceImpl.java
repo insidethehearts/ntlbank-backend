@@ -3,7 +3,6 @@ package me.belyakov.ntlbank.services.implementations;
 import me.belyakov.ntlbank.data.entities.cards.Card;
 import me.belyakov.ntlbank.data.repositories.CardRepository;
 import me.belyakov.ntlbank.exceptions.economy.CardNotFoundException;
-import me.belyakov.ntlbank.exceptions.economy.InsufficientFundsException;
 import me.belyakov.ntlbank.exceptions.economy.WithdrawException;
 import me.belyakov.ntlbank.objects.dto.TransactionDTO;
 import me.belyakov.ntlbank.services.EconomyService;
@@ -40,9 +39,5 @@ public class EconomyServiceImpl implements EconomyService {
         } catch (WithdrawException e) {
             throw new RuntimeException(e);
         }
-
-
-        System.out.println(senderCard); // TODO remove this
-        System.out.println(receiverCard); // TODO remove this
     }
 }
